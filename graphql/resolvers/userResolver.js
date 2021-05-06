@@ -7,12 +7,25 @@ const userResolver = {
 	Query: {
 		getUsers: async (_, { limit, skip, term }, ctx) => {
 			if (!term) term = ""
+
 			await checkAdmin(ctx)
-			const users = await User.find({
+			let users = await User.find({
 				email: { $regex: term, $options: "i" },
 			})
 				.limit(limit)
-				.skip(skip)
+				.skip(skip * limit)
+
+			users = users.map((user) => {
+				return {
+					id: user._id,
+					password: user.password,
+					email: user.email,
+					createdAt: user.createdAt,
+					isAdmin: user.isAdmin,
+					name: user.name,
+				}
+			})
+
 			return users
 		},
 	},
@@ -29,11 +42,11 @@ const userResolver = {
 		},
 		updateUserInfo: async (
 			_,
-			{ updateUserInput: { name, email, password } },
+			{ updateUserInput: { name, email, password, userId } },
 			ctx
 		) => {
 			try {
-				const userId = await checkToken(ctx)
+				await checkAdmin(ctx)
 				await validateCreateUser(name, email, password)
 
 				const user = await User.findByIdAndUpdate(

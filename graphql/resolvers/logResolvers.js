@@ -9,6 +9,7 @@ const logResolver = {
 		getLogs: async (_, { limit, skip, term }, ctx) => {
 			if (!term) term = ""
 			const userId = await checkToken(ctx)
+
 			const logs = await Logs.find({
 				number: { $regex: term, $options: "i" },
 				userId,

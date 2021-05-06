@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const logsSchema = new mongoose.Schema(
 	{
 		number: {
-			type: Number,
+			type: String,
 		},
 		comment: {
 			type: String,

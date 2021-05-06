@@ -5,7 +5,9 @@ const typeDefs = gql`
 		id: String!
 		name: String!
 		email: String!
-		isAdmin: Boolean
+		isAdmin: Boolean!
+		createdAt: String!
+		password: String!
 	}
 	type Log {
 		id: String!
@@ -28,7 +30,7 @@ const typeDefs = gql`
 		name: String!
 		email: String!
 		password: String!
-		isAdmin: Boolean!
+		userId: String!
 	}
 	input updateAdminInfoInput {
 		isAdmin: Boolean!
@@ -44,8 +46,8 @@ const typeDefs = gql`
 	}
 
 	type Query {
-		getUsers(limit: Int!, skip: Int!, term: String): [User]!
-		getLogs(limit: Int!, skip: Int!, term: String): [Log]!
+		getUsers(limit: Int!, skip: Int!, term: String): [User!]!
+		getLogs(limit: Int!, skip: Int!, term: String): [Log!]!
 	}
 
 	type Mutation {
